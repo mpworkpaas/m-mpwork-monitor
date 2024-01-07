@@ -7,4 +7,5 @@
 ```
 https://auth.mpwork.com
 https://test.mpwork.com
+https://*.test.mpwork.com
 ```
