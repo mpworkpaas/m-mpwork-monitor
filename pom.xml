@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.mpwork.monitor</groupId>
+	<artifactId>m-monitor</artifactId>
+	<version>1.0.0</version>
+	<packaging>jar</packaging>
+	<name>m-monitor</name>
+
+    <properties>
+        <mpwork.version>4.0.m202203-SNAPSHOT</mpwork.version>
+        <mframework.version>2.0.m202110-SNAPSHOT</mframework.version>
+    
+    	<!--
+    	   - 构建时由参数指定目标目录
+    	   - 如：clean package -U -Dmpwork.mmodule.targetdirectory=target
+    	   -->
+        <mpwork.mmodule.homedirectory>d:/paas_mmodule</mpwork.mmodule.homedirectory>
+        <mpwork.mmodule.bundleid>${project.groupId}</mpwork.mmodule.bundleid>
+        <mpwork.mmodule.targetdirectory>${mpwork.mmodule.homedirectory}/${mpwork.mmodule.bundleid}/</mpwork.mmodule.targetdirectory>
+    </properties>
+	<build>
+		<plugins>
+	        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-compiler-plugin</artifactId>
+	            <configuration>
+	                <source>1.8</source>
+	                <target>1.8</target>
+	                <encoding>UTF-8</encoding>
+	            </configuration>
+	        </plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			
+			<!-- DBB@20200613, 复制依赖的指定groupid包到项目输出目录 -->
+			<!-- DBB@20201007, 以下两段plugin实现自动发布到目标文件夹（包与依赖包） -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeGroupIds>com.mpwork, org.quartz-scheduler</includeGroupIds>
+							<outputDirectory>
+								${mpwork.mmodule.targetdirectory}
+							</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-jar-plugin</artifactId>
+			    <configuration>
+			        <outputDirectory>${mpwork.mmodule.targetdirectory}/</outputDirectory>
+			    </configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>2.0.4.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>org.mframework</groupId>
+			<artifactId>mframework-core</artifactId>
+			<version>${mframework.version}</version>
+			<type>jar</type>
+			<classifier>classes</classifier>
+		</dependency>
+		
+		<!-- weapi-wclient -->
+		<dependency>
+			<groupId>org.mframework</groupId>
+			<artifactId>mframework-weapi-wclient</artifactId>
+			<version>${mframework.version}</version>
+			<type>jar</type>
+			<classifier>classes</classifier>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.mpwork</groupId>
+			<artifactId>mpwork-moduleapp-common</artifactId>
+			<version>${mpwork.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+		</dependency>
+		
+	</dependencies>
+
+</project>

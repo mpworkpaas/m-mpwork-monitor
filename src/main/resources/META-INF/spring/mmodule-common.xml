@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+	xmlns:task="http://www.springframework.org/schema/task" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/mvc 
+    http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd 
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context.xsd
+   	http://www.directwebremoting.org/schema/spring-dwr   
+	http://www.directwebremoting.org/schema/spring-dwr-4.0.xsd
+	http://www.springframework.org/schema/task 
+	http://www.springframework.org/schema/task/spring-task-4.0.xsd
+    ">
+
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean"/>
+		
+	<!-- anntion 自动扫描 -->
+	<aop:aspectj-autoproxy />
+	<task:annotation-driven />
+	<context:annotation-config />
+	<mvc:annotation-driven conversion-service="conversionService"/>
+	<context:component-scan base-package="org.mframework.**" name-generator="org.mframework.base.MAnnotationBeanNameGenerator">
+		<context:exclude-filter type="regex" expression="org.mframework.mcontainer.*" />
+		<context:exclude-filter type="regex" expression="org.mframework.mmodule.*" />
+		<context:exclude-filter type="regex" expression="org.mframework.finder.*" />
+	</context:component-scan>
+	
+	<!-- Resolves view names to protected .jsp resources within the /WEB-INF/views 
+		directory -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
+		p:prefix="/WEB-INF/jsps/" p:suffix=".jsp" />
+
+</beans>
